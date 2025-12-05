@@ -1,6 +1,8 @@
 # -*- mode: python ; coding: utf-8 -*-
 # PyInstaller spec file for macOS
 
+import os
+
 block_cipher = None
 
 a = Analysis(
@@ -10,8 +12,7 @@ a = Analysis(
     datas=[
         ('templates', 'templates'),
         ('static', 'static'),
-        ('icon.icns', '.'),
-    ],
+    ] + ([] if not os.path.exists('icon.icns') else [('icon.icns', '.')]),
     hiddenimports=[
         'PyQt5.QtCore',
         'PyQt5.QtGui',
@@ -53,13 +54,13 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
-    icon='icon.icns',  # macOS uses .icns format
+    icon='icon.icns' if os.path.exists('icon.icns') else None,  # macOS uses .icns format
 )
 
 app = BUNDLE(
     exe,
     name='YouTubeToMP3.app',
-    icon='icon.icns',
+    icon='icon.icns' if os.path.exists('icon.icns') else None,
     bundle_identifier='com.techsolutions.youtubetomp3',
     info_plist={
         'NSPrincipalClass': 'NSApplication',

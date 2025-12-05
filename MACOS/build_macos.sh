@@ -2,7 +2,8 @@
 # Build script for macOS YouTube to MP3 Downloader
 # This script builds the macOS application using PyInstaller
 
-set -e  # Exit on error
+# Don't exit on error immediately - we want to see what failed
+set +e
 
 echo "=========================================="
 echo "Building YouTube to MP3 Downloader for macOS"
@@ -31,6 +32,10 @@ fi
 # Install/upgrade dependencies
 echo "Installing Python dependencies..."
 pip3 install -r requirements.txt --upgrade
+if [ $? -ne 0 ]; then
+    echo "ERROR: Failed to install dependencies"
+    exit 1
+fi
 
 # Check if icon exists
 if [ ! -f "icon.icns" ]; then
@@ -41,24 +46,34 @@ if [ ! -f "icon.icns" ]; then
         mkdir -p icon.iconset
         # Convert ICO to PNG (requires ImageMagick or sips)
         if command -v sips &> /dev/null; then
-            sips -s format png icon.ico --out icon.iconset/icon_512x512.png
-            # Create other sizes (macOS requires multiple sizes)
-            sips -z 16 16 icon.iconset/icon_512x512.png --out icon.iconset/icon_16x16.png
-            sips -z 32 32 icon.iconset/icon_512x512.png --out icon.iconset/icon_16x16@2x.png
-            sips -z 32 32 icon.iconset/icon_512x512.png --out icon.iconset/icon_32x32.png
-            sips -z 64 64 icon.iconset/icon_512x512.png --out icon.iconset/icon_32x32@2x.png
-            sips -z 128 128 icon.iconset/icon_512x512.png --out icon.iconset/icon_128x128.png
-            sips -z 256 256 icon.iconset/icon_512x512.png --out icon.iconset/icon_128x128@2x.png
-            sips -z 256 256 icon.iconset/icon_512x512.png --out icon.iconset/icon_256x256.png
-            sips -z 512 512 icon.iconset/icon_512x512.png --out icon.iconset/icon_256x256@2x.png
-            sips -z 512 512 icon.iconset/icon_512x512.png --out icon.iconset/icon_512x512.png
-            sips -z 1024 1024 icon.iconset/icon_512x512.png --out icon.iconset/icon_512x512@2x.png
-            # Create ICNS
-            iconutil -c icns icon.iconset -o icon.icns
-            rm -rf icon.iconset
-            echo "Icon created successfully!"
+            sips -s format png icon.ico --out icon.iconset/icon_512x512.png 2>/dev/null
+            if [ $? -eq 0 ]; then
+                # Create other sizes (macOS requires multiple sizes)
+                sips -z 16 16 icon.iconset/icon_512x512.png --out icon.iconset/icon_16x16.png 2>/dev/null
+                sips -z 32 32 icon.iconset/icon_512x512.png --out icon.iconset/icon_16x16@2x.png 2>/dev/null
+                sips -z 32 32 icon.iconset/icon_512x512.png --out icon.iconset/icon_32x32.png 2>/dev/null
+                sips -z 64 64 icon.iconset/icon_512x512.png --out icon.iconset/icon_32x32@2x.png 2>/dev/null
+                sips -z 128 128 icon.iconset/icon_512x512.png --out icon.iconset/icon_128x128.png 2>/dev/null
+                sips -z 256 256 icon.iconset/icon_512x512.png --out icon.iconset/icon_128x128@2x.png 2>/dev/null
+                sips -z 256 256 icon.iconset/icon_512x512.png --out icon.iconset/icon_256x256.png 2>/dev/null
+                sips -z 512 512 icon.iconset/icon_512x512.png --out icon.iconset/icon_256x256@2x.png 2>/dev/null
+                sips -z 512 512 icon.iconset/icon_512x512.png --out icon.iconset/icon_512x512.png 2>/dev/null
+                sips -z 1024 1024 icon.iconset/icon_512x512.png --out icon.iconset/icon_512x512@2x.png 2>/dev/null
+                # Create ICNS
+                iconutil -c icns icon.iconset -o icon.icns 2>/dev/null
+                if [ -f "icon.icns" ]; then
+                    rm -rf icon.iconset
+                    echo "Icon created successfully!"
+                else
+                    echo "WARNING: Failed to create icon.icns. Building without icon..."
+                    rm -rf icon.iconset
+                fi
+            else
+                echo "WARNING: Failed to convert icon.ico. Building without icon..."
+                rm -rf icon.iconset
+            fi
         else
-            echo "WARNING: sips not found. Please create icon.icns manually or install ImageMagick"
+            echo "WARNING: sips not found. Building without icon..."
         fi
     else
         echo "WARNING: Neither icon.icns nor icon.ico found. Building without icon..."
@@ -74,6 +89,12 @@ rm -rf build dist *.app
 echo ""
 echo "Building application with PyInstaller..."
 pyinstaller youtube_downloader_macos.spec --clean
+BUILD_EXIT_CODE=$?
+if [ $BUILD_EXIT_CODE -ne 0 ]; then
+    echo "ERROR: PyInstaller build failed with exit code $BUILD_EXIT_CODE"
+    echo "Check the output above for details"
+    exit 1
+fi
 
 # Check if build was successful
 if [ -d "dist/YouTubeToMP3.app" ]; then
