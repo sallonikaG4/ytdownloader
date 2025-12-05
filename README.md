@@ -1,17 +1,17 @@
-# YouTube to MP3 Downloader
+# YouTube to MP3 Downloader for macOS
 
-A modern, cross-platform desktop application for downloading YouTube videos and playlists and converting them to MP3 format at customizable quality (default: 172kbps). Available for **Windows** and **macOS**.
+A simple, local YouTube downloader that works on your macOS system. No ads, no popups, no subscriptions - just download YouTube videos and playlists as MP3 files at 172kbps quality (customizable).
 
 ![Version](https://img.shields.io/badge/version-2.0.0-blue)
 ![License](https://img.shields.io/badge/license-GPL--3.0-green)
-![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS-lightgrey)
+![Platform](https://img.shields.io/badge/platform-macOS-lightgrey)
 
 ## 🎯 Purpose
 
-This application was created to provide a **local, ad-free solution** for downloading YouTube content as MP3 files. Unlike browser-based solutions, this runs entirely on your computer with:
+This application provides a **local, ad-free solution** for downloading YouTube content as MP3 files. Unlike browser-based solutions, this runs entirely on your Mac with:
 
 - ✅ **No ads or popups**
-- ✅ **No browser required** (native desktop app)
+- ✅ **No browser required** (native macOS app)
 - ✅ **No subscription fees**
 - ✅ **Complete privacy** (all processing happens locally)
 - ✅ **Playlist support** with selective downloading
@@ -30,57 +30,41 @@ This application was created to provide a **local, ad-free solution** for downlo
 - 🎨 **Modern, Tech-Savvy UI** - Beautiful dark theme with gradient accents
 - 📊 **Real-time Progress** - Live download progress with speed and ETA
 - 📂 **File Management** - Browse and access all downloaded files
-- 🖥️ **Native Desktop App** - No browser needed (Windows & macOS)
+- 🖥️ **Native macOS App** - No browser needed
 - 📱 **Responsive Design** - Works on all screen sizes
 
 ### Technical Features
 - 🚀 **Fast & Efficient** - Powered by yt-dlp and FFmpeg
 - 🔒 **Privacy-First** - All processing happens locally
 - 💾 **Persistent Settings** - Remembers your downloads folder preference
-- 🔄 **Auto-Installation** - Windows installer includes FFmpeg setup
 - 🎯 **Error Handling** - Graceful handling of unavailable content
 
 ## 📦 Installation
 
-### Windows
+### Option 1: DMG Installer (Recommended)
 
-#### Option 1: Installer (Recommended)
-1. Download `YouTubeToMP3_Setup.exe` from the [Releases](https://github.com/sallonikaG4/ytdownloader/releases) page
-2. Run the installer
-3. Follow the installation wizard
-4. The installer will automatically set up FFmpeg if needed
-5. Launch from Start Menu or desktop shortcut
-
-#### Option 2: Build from Source
-See [BUILD_INSTRUCTIONS.md](BUILD_INSTRUCTIONS.md) for detailed instructions.
-
-### macOS
-
-#### Option 1: DMG Installer (Recommended)
 1. Download `YouTubeToMP3_macOS_v*.dmg` from the [Releases](https://github.com/sallonikaG4/ytdownloader/releases) page
 2. Open the DMG file
 3. Drag `YouTubeToMP3.app` to your Applications folder
 4. Launch from Applications
 5. If you see a security warning, go to **System Preferences** > **Security & Privacy** > **Open Anyway**
 
-#### Option 2: Build from Source
+### Option 2: Build from Source
+
 See [MACOS/BUILD_INSTRUCTIONS_MACOS.md](MACOS/BUILD_INSTRUCTIONS_MACOS.md) for detailed instructions.
 
-### Prerequisites (For Building from Source)
-
-- **Python 3.8+** - [Download Python](https://www.python.org/downloads/)
-- **FFmpeg** - Required for audio conversion
-  - **Windows**: Included in installer, or download from [FFmpeg.org](https://ffmpeg.org/download.html)
-  - **macOS**: `brew install ffmpeg` or use `MACOS/install_ffmpeg.sh`
-  - **Linux**: `sudo apt install ffmpeg` (Ubuntu/Debian)
+**Quick build:**
+```bash
+cd MACOS
+pip3 install -r requirements.txt
+./install_ffmpeg.sh  # If FFmpeg not installed
+./build_macos.sh
+```
 
 ## 🚀 Usage
 
-### Desktop Application (Windows & macOS)
-
 1. **Launch the application**
-   - **Windows**: From Start Menu or desktop shortcut
-   - **macOS**: From Applications folder
+   - Open `YouTubeToMP3.app` from Applications folder
 
 2. **Select Downloads Folder** (First Launch)
    - Choose where you want downloaded files saved
@@ -105,24 +89,6 @@ See [MACOS/BUILD_INSTRUCTIONS_MACOS.md](MACOS/BUILD_INSTRUCTIONS_MACOS.md) for d
    - Click "Download" to save a file to your default Downloads folder
    - Files are organized by playlist name (for playlists)
 
-### Command Line Interface (Advanced)
-
-For command-line usage:
-
-```bash
-# Download a single video
-python youtube_downloader.py "https://www.youtube.com/watch?v=VIDEO_ID"
-
-# Download a playlist
-python youtube_downloader.py "https://www.youtube.com/playlist?list=PLAYLIST_ID"
-
-# Custom output directory
-python youtube_downloader.py "URL" --output "my_music"
-
-# Custom bitrate
-python youtube_downloader.py "URL" --bitrate "192k"
-```
-
 ## 📁 Output Structure
 
 - **Single Videos**: Saved directly to your chosen downloads folder
@@ -140,9 +106,7 @@ python youtube_downloader.py "URL" --bitrate "192k"
 
 ### Default Settings
 - **Bitrate**: 172kbps
-- **Output Directory**: 
-  - Windows: `Documents/YouTube Downloads`
-  - macOS: `Downloads/YouTube Downloads`
+- **Output Directory**: `Downloads/YouTube Downloads`
 - **Format**: MP3
 
 ### Available Bitrates
@@ -152,36 +116,16 @@ python youtube_downloader.py "URL" --bitrate "192k"
 - 256kbps
 - 320kbps
 
-## 🎨 Features in Detail
+## 🔧 Requirements
 
-### Playlist Selection
-- View all videos in a playlist before downloading
-- Select individual videos with checkboxes
-- "Select All" / "Deselect All" buttons for convenience
-- Unavailable videos are marked and automatically excluded
-- See how many videos are selected
-
-### Progress Tracking
-- Real-time download percentage
-- Current download speed (KB/s or MB/s)
-- Estimated time remaining (ETA)
-- Status updates (downloading, converting, etc.)
-
-### File Management
-- Browse all downloaded MP3 files
-- See file paths and organization
-- Download files directly from the app
-- Files sorted by modification date (newest first)
+- **macOS 10.13 (High Sierra) or later**
+- **FFmpeg** - Required for audio conversion
+  - Install via Homebrew: `brew install ffmpeg`
+  - Or use the installation script: `MACOS/install_ffmpeg.sh`
 
 ## 🔧 Troubleshooting
 
-### FFmpeg Not Found (Windows)
-- The installer should set up FFmpeg automatically
-- If not, download from [FFmpeg.org](https://ffmpeg.org/download.html)
-- Add FFmpeg to your system PATH
-- Restart the application
-
-### FFmpeg Not Found (macOS)
+### FFmpeg Not Found
 ```bash
 brew install ffmpeg
 ```
@@ -191,7 +135,7 @@ cd MACOS
 ./install_ffmpeg.sh
 ```
 
-### Application Won't Open (macOS)
+### Application Won't Open
 1. Go to **System Preferences** > **Security & Privacy**
 2. Click **"Open Anyway"** next to the warning message
 3. Or right-click the app and select **Open**
@@ -206,26 +150,19 @@ cd MACOS
 - Check that you have write permissions in the downloads folder
 - Try selecting a different downloads folder
 
-### Build Errors
-- Make sure Python 3.8+ is installed
-- Install all dependencies: `pip install -r requirements.txt`
-- Check platform-specific build instructions
-
 ## 🏗️ Project Structure
 
 ```
 .
-├── youtube_downloader.py      # Core download logic
-├── app.py                      # Flask web server
-├── desktop_app.py             # Desktop application wrapper
-├── templates/                 # HTML templates
-├── static/                    # CSS and JavaScript
-├── MACOS/                     # macOS-specific files
-│   ├── youtube_downloader.py  # macOS version
-│   ├── build_macos.sh         # macOS build script
+├── MACOS/                      # macOS application files
+│   ├── youtube_downloader.py  # Core download logic
+│   ├── app.py                 # Flask web server
+│   ├── desktop_app.py         # Desktop application wrapper
+│   ├── templates/             # HTML templates
+│   ├── static/                # CSS and JavaScript
+│   ├── build_macos.sh         # Build script
 │   └── ...
 ├── requirements.txt           # Python dependencies
-├── BUILD_INSTRUCTIONS.md      # Windows build guide
 └── README.md                  # This file
 ```
 
@@ -234,22 +171,21 @@ cd MACOS
 ### Running in Development Mode
 
 ```bash
-# Install dependencies
-pip install -r requirements.txt
+cd MACOS
+pip3 install -r requirements.txt
 
 # Start Flask server
-python app.py
+python3 app.py
 
 # Or run desktop app
-python desktop_app.py
+python3 desktop_app.py
 ```
 
 Then open http://localhost:5000 in your browser (if using Flask directly).
 
 ### Building for Distribution
 
-- **Windows**: See [BUILD_INSTRUCTIONS.md](BUILD_INSTRUCTIONS.md)
-- **macOS**: See [MACOS/BUILD_INSTRUCTIONS_MACOS.md](MACOS/BUILD_INSTRUCTIONS_MACOS.md)
+See [MACOS/BUILD_INSTRUCTIONS_MACOS.md](MACOS/BUILD_INSTRUCTIONS_MACOS.md) for detailed build instructions.
 
 ## 📝 Technical Details
 
@@ -303,12 +239,8 @@ This project is licensed under the **GNU General Public License v3.0** - see the
 - **Issues**: [GitHub Issues](https://github.com/sallonikaG4/ytdownloader/issues)
 - **Releases**: [GitHub Releases](https://github.com/sallonikaG4/ytdownloader/releases)
 
-## 🎉 Acknowledgments
-
-Special thanks to all the open-source projects that make this application possible.
-
 ---
 
-**Made with ❤️ for music lovers who want a simple, ad-free way to enjoy YouTube content offline.**
+**Made with ❤️ for macOS users who want a simple, ad-free way to enjoy YouTube content offline.**
 
 **Enjoy your music! 🎵**
