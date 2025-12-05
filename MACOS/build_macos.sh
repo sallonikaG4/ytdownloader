@@ -1,5 +1,6 @@
 #!/bin/bash
 # Build script for macOS YouTube to MP3 Downloader
+# This script builds the macOS application using PyInstaller
 
 set -e  # Exit on error
 
