@@ -1,0 +1,8 @@
+flask>=3.0.0
+flask-cors>=4.0.0
+yt-dlp>=2023.12.30
+PyQt5>=5.15.0
+PyQtWebEngine>=5.15.0
+pyinstaller>=6.0.0
+Pillow>=10.0.0
+

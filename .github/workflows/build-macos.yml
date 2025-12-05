@@ -1,0 +1,57 @@
+name: Build macOS Application
+
+on:
+  push:
+    branches: [ main, master ]
+    paths:
+      - 'MACOS/**'
+      - '.github/workflows/build-macos.yml'
+  pull_request:
+    branches: [ main, master ]
+    paths:
+      - 'MACOS/**'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    
+    - name: Install FFmpeg
+      run: |
+        brew install ffmpeg
+    
+    - name: Install dependencies
+      run: |
+        cd MACOS
+        pip3 install -r requirements.txt
+    
+    - name: Build application
+      run: |
+        cd MACOS
+        chmod +x build_macos.sh
+        ./build_macos.sh
+    
+    - name: Create DMG
+      run: |
+        cd MACOS
+        chmod +x create_dmg.sh
+        ./create_dmg.sh
+    
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: macOS-Application
+        path: |
+          MACOS/dist/YouTubeToMP3.app
+          MACOS/*.dmg
+        retention-days: 30
+
